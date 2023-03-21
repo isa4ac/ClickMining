@@ -14,10 +14,11 @@ A simple web server that is used for local development. If you used npm to insta
 
 #### Download and Setup:
 + Install http-server with `npm install http-server -g`.
-+ Open a Terminal in the project directory and run `http-server` to start the web server
++ Open a Terminal in the project directory and run `http-server` to start the web server.
 + In a web browser navigate to `http://127.0.0.1:8080`. 
   + Files listed in the current project directory will be accessible by the web server.
 + To stop the web server press `Ctrl + C`.
+<br><br>
 
 ### Apache Web Server
 Apache Lounge can be used for local development. Download for Windows can be found [here](https://www.apachelounge.com/download/) or see [Appache Web Server Downloads](https://httpd.apache.org/).
