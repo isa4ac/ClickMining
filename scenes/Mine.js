@@ -3,14 +3,29 @@ class Mine extends Phaser.Scene {
         super("mine");
     }
 
+    init (data) {
+        console.log(data)
+        this.backPackCapacity = data.playerStats.backPackCapacity
+    }
+
     create(){
         this.add.text(20, 20, "Mine Scene");
 
-        //let sprite = this.add.sprite(100, 100, "backpack");
-        
-
-        const backPackButton = new SceneSwitchButton(this, 30, 30, "backpack", "backpack");
+        // Create Backpack Button
+        const backPackButton = new SceneSwitchButton(this, 30, 80, "backpack", 0.1, 0.1, "backpack");
         this.add.backPackButton;
+        this.add.text(55, 75, `0/${this.backPackCapacity}`);
+
+        // Create Shop Button
+
+        // Create Next Rock Button
+
+        // Create Rock 
+
+        // PickAxe
+
+        // Coins
+
     }
 
     update(){}

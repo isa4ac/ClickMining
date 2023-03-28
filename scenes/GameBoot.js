@@ -5,9 +5,15 @@ class GameBoot extends Phaser.Scene {
 
     preload(){
         this.load.image("backpack", "assets/backpack.png");
+        this.load.image("rock", "assets/rock.png");
     }
 
     create(){
-        this.scene.start("mine");
+        
+        let playerStats = {
+            backPackCapacity: 5,
+        }
+
+        this.scene.start("mine", { playerStats });
     }
 }
