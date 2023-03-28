@@ -7,8 +7,6 @@ class SceneSwitchButton extends Phaser.GameObjects.Container {
         this.y = y;
 
         const button = this.currentScene.add.image(x, y, buttonImageKey).setInteractive();
-        
-        this.add(button);
 
         button.on('pointerup', () => {
             this.currentScene.scene.start(targetScene);

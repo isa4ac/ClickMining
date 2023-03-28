@@ -9,7 +9,7 @@ var config = {
             gravity: { y: 200 }
         }
     },
-    scene: [GameBoot, Mine, BackPack]
+    scene: [GameBoot, Mine, BackPack, Shop]
 };
 
 var game = new Phaser.Game(config);

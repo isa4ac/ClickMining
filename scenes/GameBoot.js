@@ -5,6 +5,7 @@ class GameBoot extends Phaser.Scene {
 
     preload(){
         this.load.image("backpack", "assets/backpack.png");
+        this.load.image("shop", "assets/shop.png");
     }
 
     create(){
