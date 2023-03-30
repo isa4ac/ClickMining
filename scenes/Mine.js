@@ -8,11 +8,8 @@ class Mine extends Phaser.Scene {
 
         //let sprite = this.add.sprite(100, 100, "backpack");
         
-
-        const backPackButton = new SceneSwitchButton(this, 0, 0, "backpack", "backpack");
-
-        const shopButton = new SceneSwitchButton(this, 0, 0, "shop", "shop");
-        
+        const backPackButton = new SceneSwitchButton(this, 35, 65, "backpack", .1, .1, "backpack");
+        const shopButton = new SceneSwitchButton(this, 765, 65, "shop", .1, .1, "shop");
         this.add.backPackButton;
         this.add.shopButton;
     }
