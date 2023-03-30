@@ -11,18 +11,13 @@ class Mine extends Phaser.Scene {
     }
 
     create(){
-        this.add.text(20, 20, "Mine Scene");
+        const toolbar = new Toolbar(this, "Mine Scene");
+        this.add.toolbar;
 
         this.rockHitSound = this.sound.add("rockHit");
         this.rockHitBreakSound = this.sound.add("rockHitBreak");
         this.rewardSound = this.sound.add("reward");
         this.errorSound = this.sound.add("error");
-
-        // Create Backpack Button
-        const backPackButton = new SceneSwitchButton(this, 35, 65, "backpack", .1, .1, "backpack");
-        const shopButton = new SceneSwitchButton(this, 765, 65, "shop", .1, .1, "shop");
-        this.add.shopButton;
-        this.add.backPackButton;
         this.backpackText = this.add.text(55, 75, `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`);
 
         // Create Shop Button
@@ -37,7 +32,7 @@ class Mine extends Phaser.Scene {
         // Coins
     }
 
-    update(){}
+    update(){}z
 
     createRock(){
         let rock = this.add.sprite(400, 300, "rock").setInteractive();

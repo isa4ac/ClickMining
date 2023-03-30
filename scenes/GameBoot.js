@@ -16,6 +16,7 @@ class GameBoot extends Phaser.Scene {
         this.load.image("ruby", "assets/ruby.png");
         this.load.image("sapphire", "assets/sapphire.png");
         this.load.image("topaz", "assets/topaz.png");
+        this.load.image("pickaxe", "assets/pickaxe.png");
 
         this.load.audio("rockHit", "assets/rockHit.mp3");
         this.load.audio("rockHitBreak", "assets/rockHitBreak.mp3");
