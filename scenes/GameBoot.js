@@ -5,6 +5,8 @@ class GameBoot extends Phaser.Scene {
 
     preload(){
         this.load.image("backpack", "assets/backpack.png");
+        this.load.image("shop", "assets/shop.png");
+        this.load.image("cave", "assets/cave.png");
         this.load.image("rock", "assets/rock.png");
         this.load.image("amethyst", "assets/amethyst.png");
         this.load.image("diamond", "assets/diamond.png");

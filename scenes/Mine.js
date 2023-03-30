@@ -19,7 +19,9 @@ class Mine extends Phaser.Scene {
         this.errorSound = this.sound.add("error");
 
         // Create Backpack Button
-        const backPackButton = new SceneSwitchButton(this, 30, 80, "backpack", 0.1, 0.1, "backpack");
+        const backPackButton = new SceneSwitchButton(this, 35, 65, "backpack", .1, .1, "backpack");
+        const shopButton = new SceneSwitchButton(this, 765, 65, "shop", .1, .1, "shop");
+        this.add.shopButton;
         this.add.backPackButton;
         this.backpackText = this.add.text(55, 75, `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`);
 
@@ -33,7 +35,6 @@ class Mine extends Phaser.Scene {
         // PickAxe
 
         // Coins
-
     }
 
     update(){}
