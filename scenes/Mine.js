@@ -3,14 +3,16 @@ class Mine extends Phaser.Scene {
         super("mine");
     }
 
-    init (data) {
-        console.log(data)
-        this.playerStats = data.playerStats;
-        this.rewards = data.rewards;
+    init () {
+        this.playerStats = this.registry.get('playerStats');
+        this.rewards = this.registry.get('rewards');
+        this.gameStats = this.registry.get('gameStats');
         this.backpackText;
+        
     }
 
     create(){
+
         this.add.text(20, 20, "Mine Scene");
 
         this.rockHitSound = this.sound.add("rockHit");
@@ -30,7 +32,11 @@ class Mine extends Phaser.Scene {
         // Create Next Rock Button
 
         // Create Rock 
-        this.createRock()
+        if (this.isObjEmpty(this.gameStats.rewardOnScreen)){
+            this.createRock();
+        } else {
+            this.showReward(this.gameStats.rewardOnScreen);
+        }
 
         // PickAxe
 
@@ -44,14 +50,24 @@ class Mine extends Phaser.Scene {
         rock.scale = 0.5;
 
         let maxRockHealth = 1000;
-        let currentRockHealth = 1000;
+        let currentRockHealth;
+
+        if (this.gameStats.currentRockHealth > 0){
+            currentRockHealth = this.gameStats.currentRockHealth;
+        } else {
+            currentRockHealth = 1000;
+        }
+
         let rockHealthText = this.add.text(350, 450, `${currentRockHealth}/${maxRockHealth}`);
 
         let possibleRewards = [this.rewards.diamond, this.rewards.amethyst, this.rewards.emerald, 
-            this.rewards.ruby, this.rewards.sapphire, this.rewards.topaz];
+            this.rewards.ruby, this.rewards.sapphire, this.rewards.topaz, this.rewards.coal, this.rewards.quartz, this.rewards.iron];
 
         rock.on("pointerup", () => {
             currentRockHealth -= this.playerStats.pickAxePower;
+
+            this.gameStats.currentRockHealth = currentRockHealth;
+            this.registry.set('gamesStats', this.gameStats);
 
             if (currentRockHealth > 0){
                 rockHealthText.setText(`${currentRockHealth}/${maxRockHealth}`);
@@ -61,20 +77,23 @@ class Mine extends Phaser.Scene {
                 this.rockHitBreakSound.play();
                 rock.destroy();
                 rockHealthText.destroy();
-                this.showReward(possibleRewards);
+                this.showReward(this.getReward(possibleRewards));
             }
             
         })
     }
 
-    showReward(rewards){
-        let reward = rewards[Math.floor(Math.random() * (rewards.length -1))];
-        console.log(reward);
+    getReward(rewards){
+        return rewards[Math.floor(Math.random() * (rewards.length))];
+    }
 
+    showReward(reward){
         let rewardSprite = this.add.sprite(400, 300, reward.name).setInteractive();
-        rewardSprite.scale = 0.5;
+        rewardSprite.scale = 0.3;
 
         let clickable = true;
+
+        this.gameStats.rewardOnScreen = reward;
 
         rewardSprite.on("pointerup", () => {
             // Only register one click from the user
@@ -86,13 +105,20 @@ class Mine extends Phaser.Scene {
             // Check if the player has room to collect item
             if(this.playerStats.currentItemCount < this.playerStats.backPackCapacity){
                 this.rewardSound.play();
-                this.time.addEvent({delay: 1000, callback: () =>{
+                this.time.addEvent({delay: /*1000*/0, callback: () =>{
                     // Add reward to backpack
-                    this.playerStats.currentBackpackitems.push(reward);
+                    this.playerStats.currentBackpackItems.push(reward);
+                    
                     // Update backpack current items
                     this.playerStats.currentItemCount++;
                     this.backpackText.setText(`${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`)
+                    
+                    // Update registry
+                    this.registry.set('playerStats', this.playerStats);
+
                     // Remove current reward and create a new rock
+                    this.gameStats.rewardOnScreen = {};
+                    this.registry.set('gameStats', this.gameStats);
                     rewardSprite.destroy();
                     this.createRock();
                 }})   
@@ -100,8 +126,12 @@ class Mine extends Phaser.Scene {
                 this.errorSound.play();
                 clickable = true;
                 // Display need to sell message
+
             }
         })
     }
 
+    isObjEmpty (obj) {
+        return Object.keys(obj).length === 0;
+    }
 }
