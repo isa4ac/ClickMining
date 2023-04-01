@@ -16,7 +16,8 @@ class GameBoot extends Phaser.Scene {
         this.load.image("topaz", "assets/images/topaz.png");
         this.load.image("coal", "assets/images/coal.png");
         this.load.image("quartz", "assets/images/quartz.png");
-        this.load.image("iron", "assets/images/iron.png")
+        this.load.image("iron", "assets/images/iron.png");
+        this.load.image("arrow", "assets/images/arrow.png");
 
         this.load.audio("rockHit", "assets/sounds/rockHit.mp3");
         this.load.audio("rockHitBreak", "assets/sounds/rockHitBreak.mp3");
@@ -72,14 +73,44 @@ class GameBoot extends Phaser.Scene {
             }
         }
 
+        let rocks = {
+            rockI: {
+                name: "Rock I",
+                number: 0,
+                maxHealth: 1000,
+                possibleRewards: [rewards.coal, rewards.iron, rewards.quartz]
+            },
+            rockII: {
+                name: "Rock II",
+                number: 1,
+                maxHealth: 5000,
+                possibleRewards: [rewards.amethyst, rewards.topaz, rewards.sapphire,]
+            },
+            rockIII: {
+                name: "Rock III",
+                number: 2,
+                maxHealth: 10000,
+                possibleRewards: [rewards.ruby, rewards.emerald,]
+            },
+            rockIV: {
+                name: "Rock IV",
+                number: 3,
+                maxHealth: 50000,
+                possibleRewards: [rewards.diamond]
+            }
+        }
+
         let gameStats = {
+            currentRock: rocks.rockI,
             currentRockHealth: 0,
+            purchasedRocks: [rocks.rockI, rocks.rockII, rocks.rockIII, rocks.rockIV],
             rewardOnScreen: {}
         }
 
         this.registry.set('playerStats', playerStats);
         this.registry.set('rewards', rewards);
         this.registry.set('gameStats', gameStats);
+        this.registry.set('rocks', rocks);
 
         this.scene.start("mine");
     }
