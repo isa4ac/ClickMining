@@ -1,7 +1,6 @@
 class Toolbar extends Phaser.GameObjects.Container {
     constructor(currentScene, sceneName) {
         super(currentScene);
-
         this.currentScene = currentScene;
 
         var rect = new Phaser.Geom.Rectangle(0, 0, 800, 60);
@@ -9,7 +8,6 @@ class Toolbar extends Phaser.GameObjects.Container {
         toolbar.fillRectShape(rect);
 
         const backPackButton = new SceneSwitchButton(this.currentScene, 30, 30, "backpack", .1, .1, "backpack");
-        const shopButton = new SceneSwitchButton(this.currentScene, 760, 30, "shop", .1, .1, "shop");
         
         var coinIcon = this.currentScene.add.sprite(150, 30, "coins");
         coinIcon.scaleX = .1;
@@ -20,7 +18,11 @@ class Toolbar extends Phaser.GameObjects.Container {
 
         currentScene.add.text(360, 20, sceneName);
         currentScene.add.toolbar;
-        currentScene.add.backPackButton;
-        currentScene.add.shopButton;
+
+        if (sceneName == "Mine Scene") { // is mine, needs work
+            const shopButton = new SceneSwitchButton(this.currentScene, 760, 30, "shop", .1, .1, "shop");
+        } else { 
+            const caveButton = new SceneSwitchButton(this.currentScene, 760, 30, "cave", .1, .1, "mine");
+        }
     }
 }

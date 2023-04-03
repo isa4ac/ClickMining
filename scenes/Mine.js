@@ -32,7 +32,7 @@ class Mine extends Phaser.Scene {
         // Coins
     }
 
-    update(){}z
+    update(){}
 
     createRock(){
         let rock = this.add.sprite(400, 300, "rock").setInteractive();
