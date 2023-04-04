@@ -8,7 +8,7 @@ class Shop extends Phaser.Scene {
         this.add.toolbar;
 
         // Create a new container for the menu
-        var menuContainer = this.add.container(100, 200);
+        var menuContainer = this.add.container(150, 200);
 
         // Define the row height and spacing
         var rowHeight = 50;
@@ -16,7 +16,7 @@ class Shop extends Phaser.Scene {
 
         // Define the data for the menu rows
         var menuData = [
-            { label: 'Option 1', value: 1 },
+            { label: 'Option 1', value: 1 }, // Value can be a and object that contains
             { label: 'Option 2', value: 2 },
             { label: 'Option 3', value: 3 },
             { label: 'Option 4', value: 4 },
