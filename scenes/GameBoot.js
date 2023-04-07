@@ -107,10 +107,10 @@ class GameBoot extends Phaser.Scene {
             rewardOnScreen: {}
         }
 
-        this.registry.set('playerStats', playerStats);
-        this.registry.set('rewards', rewards);
-        this.registry.set('gameStats', gameStats);
-        this.registry.set('rocks', rocks);
+        DataManager.save('playerStats', playerStats);
+        DataManager.save('rewards', rewards);
+        DataManager.save('gameStats', gameStats);
+        DataManager.save('rocks', rocks);
 
         this.scene.start("mine");
     }

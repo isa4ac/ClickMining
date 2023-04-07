@@ -4,9 +4,9 @@ class BackPack extends Phaser.Scene {
     }
 
     init () {
-        this.playerStats = this.registry.get('playerStats');
-        this.rewards = this.registry.get('rewards');
-        this.gameStats = this.registry.get('gameStats');
+        this.playerStats = DataManager.load('playerStats');
+        this.rewards = DataManager.load('rewards');
+        this.gameStats = DataManager.load('gameStats');
 
     }
 
