@@ -21,10 +21,8 @@ class Mine extends Phaser.Scene {
         this.aGrid = new AlignGrid({scene:this, rows:11, cols:11})
         //this.aGrid.showNumbers();
 
-        const toolbar = new Toolbar(this, "Mine Scene");
+        const toolbar = new Toolbar(this);
         this.add.toolbar;
-
-        this.add.text(20, 20, "Mine Scene");
 
         this.rockHitSound = this.sound.add("rockHit");
         this.rockHitBreakSound = this.sound.add("rockHitBreak");
