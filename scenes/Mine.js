@@ -4,10 +4,10 @@ class Mine extends Phaser.Scene {
     }
 
     init () {
-        this.playerStats = this.registry.get('playerStats');
-        this.rewards = this.registry.get('rewards');
-        this.gameStats = this.registry.get('gameStats');
-        this.rocks = this.registry.get('rocks');
+        this.playerStats = DataManager.load('playerStats');
+        this.rewards = DataManager.load('rewards');
+        this.gameStats = DataManager.load('gameStats');
+        this.rocks = DataManager.load('rocks');
         this.backpackText;
         this.rock;
         this.rockHealthText;
@@ -73,7 +73,7 @@ class Mine extends Phaser.Scene {
             currentRockHealth -= this.playerStats.pickAxePower;
 
             this.gameStats.currentRockHealth = currentRockHealth;
-            this.registry.set('gamesStats', this.gameStats);
+            DataManager.update('gameStats', this.gameStats);
 
             if (currentRockHealth > 0){
                 this.rockHealthText.setText(`${currentRockHealth}/${maxRockHealth}`);
@@ -100,6 +100,7 @@ class Mine extends Phaser.Scene {
         let clickable = true;
 
         this.gameStats.rewardOnScreen = reward;
+        DataManager.update('gameStats', this.gameStats);
 
         rewardSprite.on("pointerup", () => {
             // Only register one click from the user
@@ -120,11 +121,11 @@ class Mine extends Phaser.Scene {
                     this.backpackText.setText(`${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`)
                     
                     // Update registry
-                    this.registry.set('playerStats', this.playerStats);
+                    DataManager.update('playerStats', this.playerStats);
 
                     // Remove current reward and create a new rock
                     this.gameStats.rewardOnScreen = {};
-                    this.registry.set('gameStats', this.gameStats);
+                    DataManager.update('gameStats', this.gameStats);
                     rewardSprite.destroy();
                     this.createRock(this.gameStats.currentRock);
                 }})   
@@ -183,7 +184,7 @@ class Mine extends Phaser.Scene {
             // Right arrow currentRockIndex++ Left arrow currentRockIndex--
             flipped ? this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex + 1] : this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex - 1];
             this.gameStats.currentRockHealth = this.gameStats.currentRock.maxHealth;
-            this.registry.set('gameStats', this.gameStats);
+            DataManager.update('gameStats', this.gameStats);
 
             // Destroy old UI sprites and text
             this.removeRockUI(); 
