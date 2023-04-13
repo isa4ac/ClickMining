@@ -2,7 +2,7 @@ class Toolbar extends Phaser.GameObjects.Container {
     constructor(currentScene) {
         super(currentScene);
 
-        var gameStats = currentScene.registry.get("gameStats");
+        var gameStats = DataManager.load("gameStats");
 
         this.currentScene = currentScene;
 

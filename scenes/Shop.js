@@ -4,8 +4,8 @@ class Shop extends Phaser.Scene {
     }
 
     init() {
-        this.playerStats = this.registry.get('playerStats');
-        this.gameStats = this.registry.get('gameStats');
+        this.playerStats = DataManager.load('playerStats');
+        this.gameStats = DataManager.load('gameStats');
     }
 
     convertToRoman(num) {

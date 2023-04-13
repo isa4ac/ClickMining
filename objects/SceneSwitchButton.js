@@ -10,9 +10,9 @@ class SceneSwitchButton extends Phaser.GameObjects.Container {
         button.scaleY = scaleY;
 
         button.on('pointerup', () => {
-            var gameStats = currentScene.registry.get("gameStats");
+            var gameStats = DataManager.load("gameStats");
             gameStats.currentScene = targetScene;
-            currentScene.registry.set("gameStats", gameStats);
+            DataManager.update("gameStats", gameStats);
             this.currentScene.scene.start(targetScene);
             this.currentScene.stop;
         })
