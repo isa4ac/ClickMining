@@ -7,15 +7,14 @@ class BackPack extends Phaser.Scene {
         this.playerStats = DataManager.load('playerStats');
         this.rewards = DataManager.load('rewards');
         this.gameStats = DataManager.load('gameStats');
-
     }
 
     create(){
         this.aGrid = new AlignGrid({scene:this, rows:11, cols:11})
         //this.aGrid.showNumbers();
 
-        this.add.text(20,20, "Backpack Scene");
-        const backPackButton = new SceneSwitchButton(this, 35, 65, "cave", .1, .1, "mine");
+        const toolbar = new Toolbar(this);
+        this.add.toolbar;
 
         let backpackItems = this.playerStats.currentBackpackItems;
         let itemNames = [];
@@ -31,9 +30,7 @@ class BackPack extends Phaser.Scene {
           }, {});
         
         this.displayItems(uniqs)
-
         
-
     }
 
     update(){}

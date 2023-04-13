@@ -8,12 +8,15 @@ class GameBoot extends Phaser.Scene {
         this.load.image("shop", "assets/images/shop.png");
         this.load.image("cave", "assets/images/cave.png");
         this.load.image("rock", "assets/images/rock.png");
+        this.load.image("sellButton", "assets/images/sell.png");
+        this.load.image("coins", "assets/images/coins.png");
         this.load.image("amethyst", "assets/images/amethyst.png");
         this.load.image("diamond", "assets/images/diamond.png");
         this.load.image("emerald", "assets/images/emerald.png");
         this.load.image("ruby", "assets/images/ruby.png");
         this.load.image("sapphire", "assets/images/sapphire.png");
         this.load.image("topaz", "assets/images/topaz.png");
+        this.load.image("pickaxe", "assets/images/pickaxe.png");
         this.load.image("coal", "assets/images/coal.png");
         this.load.image("quartz", "assets/images/quartz.png");
         this.load.image("iron", "assets/images/iron.png");
@@ -32,6 +35,7 @@ class GameBoot extends Phaser.Scene {
             currentItemCount: 0,
             currentBackpackItems: [],
             pickAxePower: 100,
+            autoMinerTier: 0
         }
 
         let rewards = {
@@ -101,6 +105,7 @@ class GameBoot extends Phaser.Scene {
         }
 
         let gameStats = {
+            currentScene: "mine",
             currentRock: rocks.rockI,
             currentRockHealth: 0,
             purchasedRocks: [rocks.rockI, rocks.rockII, rocks.rockIII, rocks.rockIV],
