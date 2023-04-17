@@ -35,7 +35,8 @@ class GameBoot extends Phaser.Scene {
             currentItemCount: 0,
             currentBackpackItems: [],
             pickAxePower: 100,
-            autoMinerTier: 0
+            autoMinerDamage: 100,
+            autoMinerSpeed: 5000
         }
 
         let rewards = {
