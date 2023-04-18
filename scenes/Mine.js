@@ -1,53 +1,57 @@
 class Mine extends Phaser.Scene {
-    constructor() {
-        super("mine");
+  constructor() {
+    super('mine')
+  }
+
+  init() {
+    this.playerStats = DataManager.load('playerStats')
+    this.rewards = DataManager.load('rewards')
+    this.gameStats = DataManager.load('gameStats')
+    this.rocks = DataManager.load('rocks')
+    this.backpackText
+    this.rock
+    this.rockHealthText
+    this.rockNameText
+    this.arrow1 = null
+    this.arrow2 = null
+  }
+
+  create() {
+    this.aGrid = new AlignGrid({scene: this, rows: 11, cols: 11})
+    this.add.image(0, 0, 'caveBG').setOrigin(0)
+
+    //this.aGrid.showNumbers();
+
+    const toolbar = new Toolbar(this)
+    this.add.toolbar
+
+    this.rockHitSound = this.sound.add('rockHit')
+    this.rockHitBreakSound = this.sound.add('rockHitBreak')
+    this.rewardSound = this.sound.add('reward')
+    this.errorSound = this.sound.add('error')
+    this.backpackText = this.add.text(
+      55,
+      75,
+      `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`
+    )
+
+    // Create Shop Button
+
+    // Create Next Rock Button
+
+    // Create Rock
+    if (this.isObjEmpty(this.gameStats.rewardOnScreen)) {
+      this.createRock(this.gameStats.currentRock)
+    } else {
+      this.showReward(this.gameStats.rewardOnScreen)
     }
 
-    init () {
-        this.playerStats = DataManager.load('playerStats');
-        this.rewards = DataManager.load('rewards');
-        this.gameStats = DataManager.load('gameStats');
-        this.rocks = DataManager.load('rocks');
-        this.backpackText;
-        this.rock;
-        this.rockHealthText;
-        this.rockNameText;
-        this.isAutoMining = false;
-        this.arrow1 = null;
-        this.arrow2 = null;
-    }
+    // PickAxe
 
-    create(){
+    // Coins
+  }
 
-        this.aGrid = new AlignGrid({scene:this, rows:11, cols:11})
-        //this.aGrid.showNumbers();
-
-        const toolbar = new Toolbar(this);
-        this.add.toolbar;
-
-        this.rockHitSound = this.sound.add("rockHit");
-        this.rockHitBreakSound = this.sound.add("rockHitBreak");
-        this.rewardSound = this.sound.add("reward");
-        this.errorSound = this.sound.add("error");
-        this.backpackText = this.add.text(55, 75, `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`);
-
-        // Create Shop Button
-
-        // Create Next Rock Button
-
-        // Create Rock 
-        if (this.isObjEmpty(this.gameStats.rewardOnScreen)){
-            this.createRock(this.gameStats.currentRock);
-        } else {
-            this.showReward(this.gameStats.rewardOnScreen);
-        }
-
-        // PickAxe
-
-        // Coins
-    }
-
-    update(){
+ update(){
         if (!this.isAutoMining){
             this.isAutoMining = true;
             this.autoMine();
@@ -91,7 +95,7 @@ class Mine extends Phaser.Scene {
         })
     }
 
-    damageRock(damage){
+damageRock(damage){
 
         this.gameStats.currentRockHealth -= damage;
         DataManager.update('gameStats', this.gameStats);
@@ -105,131 +109,159 @@ class Mine extends Phaser.Scene {
             this.removeRockUI();
             this.showReward(this.getReward(this.gameStats.currentRock.possibleRewards));
         }
-    }
 
-    getReward(rewards){
-        return rewards[Math.floor(Math.random() * (rewards.length))];
-    }
+    this.rockHealthText = this.add.text(0, 0, `${currentRockHealth}/${maxRockHealth}`)
+    this.rockHealthText.setOrigin(0.5, 0.5)
+    this.aGrid.placeAtIndex(93, this.rockHealthText)
 
-    showReward(reward){
-        let rewardSprite = this.add.sprite(0, 0, reward.name).setInteractive();
-        rewardSprite.scale = 0.3;
-        Align.center(rewardSprite);
+    this.createRockUI(rockObj)
 
-        let clickable = true;
+    let possibleRewards = rockObj.possibleRewards
 
-        this.gameStats.rewardOnScreen = reward;
-        DataManager.update('gameStats', this.gameStats);
+    this.rock.on('pointerup', () => {
+      currentRockHealth -= this.playerStats.pickAxePower
 
-        rewardSprite.on("pointerup", () => {
-            // Only register one click from the user
-            if (!clickable) {
-                return;
-            }
-            clickable = false;
+      this.gameStats.currentRockHealth = currentRockHealth
+      DataManager.update('gameStats', this.gameStats)
 
-            // Check if the player has room to collect item
-            if(this.playerStats.currentItemCount < this.playerStats.backPackCapacity){
-                this.rewardSound.play();
-                this.time.addEvent({delay: /*1000*/0, callback: () =>{
-                    // Add reward to backpack
-                    this.playerStats.currentBackpackItems.push(reward);
-                    
-                    // Update backpack current items
-                    this.playerStats.currentItemCount++;
-                    this.backpackText.setText(`${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`)
-                    
-                    // Update registry
-                    DataManager.update('playerStats', this.playerStats);
+      if (currentRockHealth > 0) {
+        this.rockHealthText.setText(`${currentRockHealth}/${maxRockHealth}`)
+        this.rockHitSound.play()
+      } else {
+        this.rockHealthText.setText(`0/${maxRockHealth}`)
+        this.rockHitBreakSound.play()
+        this.removeRockUI()
+        this.showReward(this.getReward(possibleRewards))
+      }
+    })
+  }
 
-                    // Remove current reward and create a new rock
-                    this.gameStats.rewardOnScreen = {};
-                    DataManager.update('gameStats', this.gameStats);
-                    rewardSprite.destroy();
-                    this.createRock(this.gameStats.currentRock);
-                }})   
-            } else {
-                this.errorSound.play();
-                clickable = true;
-                // Display need to sell message
+  getReward(rewards) {
+    return rewards[Math.floor(Math.random() * rewards.length)]
+  }
 
-            }
+  showReward(reward) {
+    let rewardSprite = this.add.sprite(0, 0, reward.name).setInteractive()
+    rewardSprite.scale = 0.3
+    Align.center(rewardSprite)
+
+    let clickable = true
+
+    this.gameStats.rewardOnScreen = reward
+    DataManager.update('gameStats', this.gameStats)
+
+    rewardSprite.on('pointerup', () => {
+      // Only register one click from the user
+      if (!clickable) {
+        return
+      }
+      clickable = false
+
+      // Check if the player has room to collect item
+      if (this.playerStats.currentItemCount < this.playerStats.backPackCapacity) {
+        this.rewardSound.play()
+        this.time.addEvent({
+          delay: /*1000*/ 0,
+          callback: () => {
+            // Add reward to backpack
+            this.playerStats.currentBackpackItems.push(reward)
+
+            // Update backpack current items
+            this.playerStats.currentItemCount++
+            this.backpackText.setText(
+              `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`
+            )
+
+            // Update registry
+            DataManager.update('playerStats', this.playerStats)
+
+            // Remove current reward and create a new rock
+            this.gameStats.rewardOnScreen = {}
+            DataManager.update('gameStats', this.gameStats)
+            rewardSprite.destroy()
+            this.createRock(this.gameStats.currentRock)
+          },
         })
+      } else {
+        this.errorSound.play()
+        clickable = true
+        // Display need to sell message
+      }
+    })
+  }
+
+  createRockUI(rockData) {
+    // Display Rock name
+    this.rockNameText = this.add.text(0, 0, rockData.name)
+    this.rockNameText.setOrigin(0.5, 0.5)
+    this.aGrid.placeAtIndex(104, this.rockNameText)
+
+    // If RockI display purchase next Rock button or arrow to next rock if owned
+    if (rockData.number == 0) {
+      this.displayArrows(105, 2, true, rockData.number)
+    }
+    // If RockI < Rock# < RockFinal, display purchase next Rock button or arrows back/to next rock if owned
+    else if (rockData.number < this.gameStats.purchasedRocks.length - 1) {
+      this.displayArrows(103, 1, false, rockData.number)
+      this.displayArrows(105, 2, true, rockData.number)
+    }
+    // If RockFinal display arrows back
+    else if (rockData.number == this.gameStats.purchasedRocks.length - 1) {
+      this.displayArrows(103, 1, false, rockData.number)
+    }
+  }
+
+  displayArrows(position, arrowNum, flipped, currentRockIndex) {
+    let arrow
+
+    if (arrowNum == 1) {
+      this.arrow1 = this.add.sprite(0, 0, 'arrow').setInteractive()
+      arrow = this.arrow1
+    } else {
+      this.arrow2 = this.add.sprite(0, 0, 'arrow').setInteractive()
+      arrow = this.arrow2
     }
 
-    createRockUI(rockData) {
+    arrow.scale = 0.05
+    arrow.flipX = flipped
+    this.aGrid.placeAtIndex(position, arrow)
 
-        // Display Rock name
-        this.rockNameText = this.add.text(0,0, rockData.name);
-        this.rockNameText.setOrigin(0.5, 0.5);
-        this.aGrid.placeAtIndex(104, this.rockNameText);
+    arrow.on('pointerup', () => {
+      if (currentRockIndex == this.gameStats.purchasedRocks.length || currentRockIndex < 0) {
+        return
+      }
 
-        // If RockI display purchase next Rock button or arrow to next rock if owned
-        if(rockData.number == 0){
-            this.displayArrows(105, 2, true, rockData.number);
-        }
-        // If RockI < Rock# < RockFinal, display purchase next Rock button or arrows back/to next rock if owned
-        else if(rockData.number < this.gameStats.purchasedRocks.length - 1){
-            this.displayArrows(103, 1, false, rockData.number);
-            this.displayArrows(105, 2, true, rockData.number);
-        }
-        // If RockFinal display arrows back
-        else if (rockData.number == this.gameStats.purchasedRocks.length - 1){
-            this.displayArrows(103, 1, false, rockData.number);
-        }
+      // Right arrow currentRockIndex++ Left arrow currentRockIndex--
+      flipped
+        ? (this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex + 1])
+        : (this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex - 1])
+      this.gameStats.currentRockHealth = this.gameStats.currentRock.maxHealth
+      DataManager.update('gameStats', this.gameStats)
+
+      // Destroy old UI sprites and text
+      this.removeRockUI()
+
+      // Create new rock
+      this.createRock(this.gameStats.currentRock)
+    })
+  }
+
+  removeRockUI() {
+    if (this.arrow1 != null) {
+      this.arrow1.destroy()
+      this.arrow1 = null
+    }
+    if (this.arrow2 != null) {
+      this.arrow2.destroy()
+      this.arrow2 = null
     }
 
-    displayArrows(position, arrowNum, flipped, currentRockIndex) {
-        let arrow;
+    this.rock.destroy()
+    this.rockHealthText.destroy()
+    this.rockNameText.destroy()
+  }
 
-        if (arrowNum == 1) {
-            this.arrow1 = this.add.sprite(0,0, "arrow").setInteractive();
-            arrow = this.arrow1;
-        } else {
-            this.arrow2 = this.add.sprite(0,0, "arrow").setInteractive();
-            arrow = this.arrow2;
-        }
-
-        arrow.scale = 0.05;
-        arrow.flipX = flipped;
-        this.aGrid.placeAtIndex(position, arrow);
-
-        arrow.on("pointerup", () =>{
-
-            if(currentRockIndex == this.gameStats.purchasedRocks.length  || currentRockIndex < 0){
-                return;
-            }
-
-            // Right arrow currentRockIndex++ Left arrow currentRockIndex--
-            flipped ? this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex + 1] : this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex - 1];
-            this.gameStats.currentRockHealth = this.gameStats.currentRock.maxHealth;
-            DataManager.update('gameStats', this.gameStats);
-
-            // Destroy old UI sprites and text
-            this.removeRockUI(); 
-
-            // Create new rock
-            this.createRock(this.gameStats.currentRock);
-
-        })
-    }
-
-    removeRockUI(){
-        if (this.arrow1 != null){
-            this.arrow1.destroy();
-            this.arrow1 = null;
-        } 
-        if (this.arrow2 != null){
-            this.arrow2.destroy();
-            this.arrow2 = null;
-        }
-
-        this.rock.destroy();
-        this.rockHealthText.destroy();
-        this.rockNameText.destroy();
-    }
-
-    isObjEmpty (obj) {
-        return Object.keys(obj).length === 0;
-    }
+  isObjEmpty(obj) {
+    return Object.keys(obj).length === 0
+  }
 }
