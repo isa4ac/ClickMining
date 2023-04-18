@@ -1,5 +1,5 @@
 class Shop extends Phaser.Scene {
-    constructor(){
+    constructor() {
         super("shop");
     }
 
@@ -77,7 +77,8 @@ class Shop extends Phaser.Scene {
             // Add the label text to the row
             var rowLabel = this.add.text(10, 10, menuData[i].label, { color: '#ffffff' });
 
-            var rowSublabel = this.add.text(10, 40, this.getSublabel(menuData[i].key), { color: '#ffffff' });
+            var rowSublabel = this.add.text(10, 40, this.getSublabel(menuData[i].key), { color: '#c3c2c3' });
+            rowSublabel.setFontSize(14);
 
             // Add the row elements to the row container
             rowContainer.add(rowBackground);
@@ -94,6 +95,14 @@ class Shop extends Phaser.Scene {
             }, this);
         }
 
+        var sellRowBackground = this.add.rectangle(0, 0, 500, rowHeight, 0x7ae08e);
+        sellRowBackground.setOrigin(0);
+        var sellRowContainer = this.add.container(0, (rowHeight + rowSpacing) * i);
+        sellRowContainer.add(sellRowBackground);
+        var sellRowLabel = this.add.text(10, 10, "Sell all resources", { color: '#ffffff' });
+        sellRowContainer
+
+        menuContainer.add(sellRowContainer);
         this.add.menuContainer;
     }
 
