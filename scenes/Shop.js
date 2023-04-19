@@ -50,6 +50,7 @@ class Shop extends Phaser.Scene {
       }
 
     create(){
+        this.add.image(0, 50, 'shopBG').setOrigin(0);
         const toolbar = new Toolbar(this);
         this.add.toolbar;
 
