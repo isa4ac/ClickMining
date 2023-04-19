@@ -29,6 +29,9 @@ class GameBoot extends Phaser.Scene {
     this.load.audio('rockHitBreak', 'assets/sounds/rockHitBreak.mp3')
     this.load.audio('reward', 'assets/sounds/reward.mp3')
     this.load.audio('error', 'assets/sounds/error.mp3')
+    this.load.audio('backpackOpen', 'assets/sounds/backpackOpen.mp3')
+    this.load.audio('mineOpen', 'assets/sounds/mineOpen.mp3')
+    this.load.audio('shopOpen', 'assets/sounds/shopOpen.mp3')
   }
 
   create() {
