@@ -30,11 +30,8 @@ class Mine extends Phaser.Scene {
     this.rockHitBreakSound = this.sound.add('rockHitBreak')
     this.rewardSound = this.sound.add('reward')
     this.errorSound = this.sound.add('error')
-    this.backpackText = this.add.text(
-      55,
-      75,
-      `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`
-    )
+    this.backpackText = this.add.text(0, 0, `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`).setOrigin(0, 0.5);
+    this.aGrid.placeAtIndex(0.5, this.backpackText);
 
     // Create Shop Button
 
