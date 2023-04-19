@@ -24,7 +24,7 @@ class Toolbar extends Phaser.GameObjects.Container {
         pickaxeIcon.scaleX = .1;
         pickaxeIcon.scaleY = .1;
         this.aGrid.placeAtIndex(9, pickaxeIcon)
-        var pickaxeText = this.currentScene.add.text(0,0, playerStats.pickAxePower).setOrigin(0, 0.5);
+        var pickaxeText = this.currentScene.add.text(0,0, playerStats.pickAxePower).setOrigin(0.5, 0.5);
         this.aGrid.placeAtIndex(8, pickaxeText);
 
         var title = currentScene.add.text(360, 20, gameStats.currentScene).setOrigin(0.5,0.5);

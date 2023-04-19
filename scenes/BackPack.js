@@ -39,7 +39,6 @@ class BackPack extends Phaser.Scene {
   displayItems(items) {
     let startingCell = 23
     let currentCell = startingCell
-    let currentRow = 1
 
     for (let prop in items) {
       let rewardSprite = this.add.sprite(0, 0, prop)
@@ -53,19 +52,19 @@ class BackPack extends Phaser.Scene {
         this.aGrid.placeAtIndex(startingCell, rewardSprite)
         this.aGrid.placeAtIndex(startingCell + 1 - 0.5, desc)
         this.aGrid.placeAtIndex(startingCell + 1 - 0.5, value)
-      } else if (currentCell < startingCell + 88) {
+      } else if (currentCell < startingCell + 9) {
         this.aGrid.placeAtIndex(currentCell, rewardSprite)
         this.aGrid.placeAtIndex(currentCell + 1 - 0.5, desc)
         this.aGrid.placeAtIndex(currentCell + 1 - 0.5, value)
       } else {
-        startingCell += 3
+        startingCell += 22
         currentCell = startingCell
         this.aGrid.placeAtIndex(startingCell, rewardSprite)
         this.aGrid.placeAtIndex(startingCell + 1 - 0.5, desc)
         this.aGrid.placeAtIndex(startingCell + 1 - 0.5, value)
       }
 
-      currentCell += 11
+      currentCell += 3
     }
   }
 }
