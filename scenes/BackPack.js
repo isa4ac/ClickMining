@@ -45,19 +45,24 @@ class BackPack extends Phaser.Scene {
       let rewardSprite = this.add.sprite(0, 0, prop)
       rewardSprite.scale = 0.1
       let desc = this.add.text(0, 0, `${prop}-${items[prop]}`)
-      desc.setOrigin(0, 0.5)
+      desc.setOrigin(0, 1.5)
+      let value = this.add.text(0, 0, `$${items[prop] * this.rewards[prop].value}`)
+      value.setOrigin(0, 0.5)
 
       if (currentCell == startingCell) {
         this.aGrid.placeAtIndex(startingCell, rewardSprite)
         this.aGrid.placeAtIndex(startingCell + 1 - 0.5, desc)
+        this.aGrid.placeAtIndex(startingCell + 1 - 0.5, value)
       } else if (currentCell < startingCell + 88) {
         this.aGrid.placeAtIndex(currentCell, rewardSprite)
         this.aGrid.placeAtIndex(currentCell + 1 - 0.5, desc)
+        this.aGrid.placeAtIndex(currentCell + 1 - 0.5, value)
       } else {
         startingCell += 3
         currentCell = startingCell
         this.aGrid.placeAtIndex(startingCell, rewardSprite)
         this.aGrid.placeAtIndex(startingCell + 1 - 0.5, desc)
+        this.aGrid.placeAtIndex(startingCell + 1 - 0.5, value)
       }
 
       currentCell += 11

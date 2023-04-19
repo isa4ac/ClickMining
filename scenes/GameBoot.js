@@ -124,6 +124,13 @@ class GameBoot extends Phaser.Scene {
     DataManager.save('gameStats', gameStats)
     DataManager.save('rocks', rocks)
 
-    this.scene.start('mine')
+
+    var currentScene = DataManager.load('gameStats').currentScene
+    if(currentScene == 'mine') {
+      this.scene.start('mine')
+    } else {
+      this.scene.start(currentScene)
+    }
+    
   }
 }
