@@ -40,7 +40,6 @@ class GameBoot extends Phaser.Scene {
   create() {
     let playerStats = {
       backPackCapacity: 5,
-      currentItemCount: 0,
       currentBackpackItems: [],
       pickAxePower: 100,
       autoMinerDamage: 100,

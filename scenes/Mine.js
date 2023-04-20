@@ -8,13 +8,13 @@ class Mine extends Phaser.Scene {
     this.rewards = DataManager.load('rewards')
     this.gameStats = DataManager.load('gameStats')
     this.rocks = DataManager.load('rocks')
-    this.backpackText
     this.rock
     this.rockHealthText
     this.rockNameText
     this.isAutoMining = false
     this.arrow1 = null
     this.arrow2 = null
+    this.toolbar
   }
 
   create() {
@@ -23,15 +23,13 @@ class Mine extends Phaser.Scene {
 
     //this.aGrid.showNumbers();
 
-    const toolbar = new Toolbar(this)
-    this.add.toolbar
+    this.toolbar = new Toolbar(this)
+    this.toolbar.display()
 
     this.rockHitSound = this.sound.add('rockHit')
     this.rockHitBreakSound = this.sound.add('rockHitBreak')
     this.rewardSound = this.sound.add('reward')
     this.errorSound = this.sound.add('error')
-    this.backpackText = this.add.text(0, 0, `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`).setOrigin(0, 0.5);
-    this.aGrid.placeAtIndex(0.5, this.backpackText);
 
     // Create Rock
     if (this.isObjEmpty(this.gameStats.rewardOnScreen)) {
@@ -127,7 +125,7 @@ class Mine extends Phaser.Scene {
       clickable = false
 
       // Check if the player has room to collect item
-      if (this.playerStats.currentItemCount < this.playerStats.backPackCapacity) {
+      if (this.playerStats.currentBackpackItems.length < this.playerStats.backPackCapacity) {
         this.rewardSound.play()
         this.time.addEvent({
           delay: /*1000*/ 0,
@@ -135,13 +133,9 @@ class Mine extends Phaser.Scene {
             // Add reward to backpack
             this.playerStats.currentBackpackItems.push(reward)
 
-            // Update backpack current items
-            this.playerStats.currentItemCount++
-            this.backpackText.setText(
-              `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`
-            )
-
             DataManager.update('playerStats', this.playerStats)
+
+            this.toolbar.display();
 
             // Remove current reward and create a new rock
             this.gameStats.rewardOnScreen = {}
