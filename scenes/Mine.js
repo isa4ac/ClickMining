@@ -37,7 +37,6 @@ class Mine extends Phaser.Scene {
     } else {
       this.showReward(this.gameStats.rewardOnScreen)
     }
-
   }
 
   update() {
@@ -153,6 +152,7 @@ class Mine extends Phaser.Scene {
   }
 
   createRockUI(rockData) {
+    const availableRocks = Object.keys(this.rocks)
     // Display Rock name
     this.rockNameText = this.add.text(0, 0, rockData.name)
     this.rockNameText.setOrigin(0.5, 0.5)
@@ -163,19 +163,18 @@ class Mine extends Phaser.Scene {
       this.displayArrows(105, 2, true, rockData.number)
     }
     // If RockI < Rock# < RockFinal, display purchase next Rock button or arrows back/to next rock if owned
-    else if (rockData.number < this.gameStats.purchasedRocks.length - 1) {
+    else if (rockData.number < availableRocks.length - 1) {
       this.displayArrows(103, 1, false, rockData.number)
       this.displayArrows(105, 2, true, rockData.number)
     }
     // If RockFinal display arrows back
-    else if (rockData.number == this.gameStats.purchasedRocks.length - 1) {
+    else if (rockData.number == availableRocks.length - 1) {
       this.displayArrows(103, 1, false, rockData.number)
     }
   }
 
   displayArrows(position, arrowNum, flipped, currentRockIndex) {
     let arrow
-
     if (arrowNum == 1) {
       this.arrow1 = this.add.sprite(0, 0, 'arrow').setInteractive()
       arrow = this.arrow1
@@ -183,29 +182,74 @@ class Mine extends Phaser.Scene {
       this.arrow2 = this.add.sprite(0, 0, 'arrow').setInteractive()
       arrow = this.arrow2
     }
-
     arrow.scale = 0.05
     arrow.flipX = flipped
     this.aGrid.placeAtIndex(position, arrow)
-
-    arrow.on('pointerup', () => {
-      if (currentRockIndex == this.gameStats.purchasedRocks.length || currentRockIndex < 0) {
-        return
-      }
-
-      // Right arrow currentRockIndex++ Left arrow currentRockIndex--
-      flipped
-        ? (this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex + 1])
-        : (this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex - 1])
-      this.gameStats.currentRockHealth = this.gameStats.currentRock.maxHealth
-      DataManager.update('gameStats', this.gameStats)
-
-      // Destroy old UI sprites and text
-      this.removeRockUI()
-
-      // Create new rock
-      this.createRock(this.gameStats.currentRock)
-    })
+    var rockPurchased = false
+    if (currentRockIndex + 1 >= this.gameStats.purchasedRocks.length && flipped) {
+      arrow.on('pointerup', () => {
+        const text = this.add.text(70, 100, 'Would You Like To Purchase This Rock?', {
+          fontSize: '18px',
+          fill: '#fff',
+          backgroundColor: '#000',
+        })
+        text.setPadding(10, 10, 10, 10)
+        const buttonYes = this.add.text(550, 100, 'Yes', {
+          fontSize: '18px',
+          fill: '#fff',
+          backgroundColor: '#000',
+        })
+        buttonYes.setPadding(10, 10, 10, 10)
+        buttonYes.setInteractive().on('pointerdown', () => {
+          // Yes logic
+          text.destroy()
+          buttonYes.destroy()
+          buttonNo.destroy()
+          this.gameStats.purchasedRocks.push(Object.values(this.rocks)[currentRockIndex + 1])
+          if (currentRockIndex == this.gameStats.purchasedRocks.length || currentRockIndex < 0) {
+            return
+          }
+          this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex + 1]
+          this.gameStats.currentRockHealth = this.gameStats.currentRock.maxHealth
+          DataManager.update('gameStats', this.gameStats)
+          // Destroy old UI sprites and text
+          this.removeRockUI()
+          // Create new rock
+          this.createRock(this.gameStats.currentRock)
+        })
+        const buttonNo = this.add.text(650, 100, 'No', {
+          fontSize: '18px',
+          fill: '#fff',
+          backgroundColor: '#000',
+        })
+        buttonNo.setPadding(10, 10, 10, 10)
+        buttonNo.setInteractive().on('pointerdown', () => {
+          // No logic
+          text.destroy()
+          buttonYes.destroy()
+          buttonNo.destroy()
+        })
+      })
+    } else {
+      rockPurchased = true
+    }
+    if (rockPurchased) {
+      arrow.on('pointerup', () => {
+        if (currentRockIndex == this.gameStats.purchasedRocks.length || currentRockIndex < 0) {
+          return
+        }
+        // Right arrow currentRockIndex++ Left arrow currentRockIndex--
+        flipped
+          ? (this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex + 1])
+          : (this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex - 1])
+        this.gameStats.currentRockHealth = this.gameStats.currentRock.maxHealth
+        DataManager.update('gameStats', this.gameStats)
+        // Destroy old UI sprites and text
+        this.removeRockUI()
+        // Create new rock
+        this.createRock(this.gameStats.currentRock)
+      })
+    }
   }
 
   removeRockUI() {

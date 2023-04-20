@@ -126,7 +126,7 @@ class GameBoot extends Phaser.Scene {
       currentScene: 'mine',
       currentRock: rocks.rockI,
       currentRockHealth: 0,
-      purchasedRocks: [rocks.rockI, rocks.rockII, rocks.rockIII, rocks.rockIV],
+      purchasedRocks: [rocks.rockI],
       rewardOnScreen: {},
     }
 
@@ -135,13 +135,11 @@ class GameBoot extends Phaser.Scene {
     DataManager.save('gameStats', gameStats)
     DataManager.save('rocks', rocks)
 
-
     var currentScene = DataManager.load('gameStats').currentScene
     if(currentScene == 'mine') {
       this.scene.start('mine')
     } else {
       this.scene.start(currentScene)
     }
-    
   }
 }
