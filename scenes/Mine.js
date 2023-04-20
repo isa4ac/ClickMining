@@ -30,6 +30,8 @@ class Mine extends Phaser.Scene {
     this.rockHitBreakSound = this.sound.add('rockHitBreak')
     this.rewardSound = this.sound.add('reward')
     this.errorSound = this.sound.add('error')
+    this.backpackText = this.add.text(0, 0, `${this.playerStats.currentBackpackItems.length}/${this.playerStats.backPackCapacity}`).setOrigin(0, 0.5);
+    this.aGrid.placeAtIndex(0.5, this.backpackText);
 
     // Create Rock
     if (this.isObjEmpty(this.gameStats.rewardOnScreen)) {
@@ -130,7 +132,11 @@ class Mine extends Phaser.Scene {
           delay: /*1000*/ 0,
           callback: () => {
             // Add reward to backpack
-            this.playerStats.currentBackpackItems.push(reward)
+            this.playerStats.currentBackpackItems.push(reward);
+
+            this.backpackText.setText(
+              `${this.playerStats.currentBackpackItems.length}/${this.playerStats.backPackCapacity}`
+            )
 
             DataManager.update('playerStats', this.playerStats)
 
