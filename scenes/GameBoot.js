@@ -23,11 +23,17 @@ class GameBoot extends Phaser.Scene {
     this.load.image('arrow', 'assets/images/arrow.png')
     this.load.image('caveBG', 'assets/images/caveBG.png')
     this.load.image('backpackBG', 'assets/images/backpackBG.png')
+    this.load.image('shopBG', 'assets/images/shopBG.png')
 
     this.load.audio('rockHit', 'assets/sounds/rockHit.mp3')
     this.load.audio('rockHitBreak', 'assets/sounds/rockHitBreak.mp3')
     this.load.audio('reward', 'assets/sounds/reward.mp3')
     this.load.audio('error', 'assets/sounds/error.mp3')
+    this.load.audio('backpackOpen', 'assets/sounds/backpackOpen.mp3')
+    this.load.audio('mineOpen', 'assets/sounds/mineOpen.mp3')
+    this.load.audio('shopOpen', 'assets/sounds/shopOpen.mp3')
+    this.load.audio('buy', 'assets/sounds/buy.mp3')
+    this.load.audio('sell', 'assets/sounds/sell.mp3')
   }
 
   create() {
@@ -36,7 +42,9 @@ class GameBoot extends Phaser.Scene {
       currentItemCount: 0,
       currentBackpackItems: [],
       pickAxePower: 100,
-      autoMinerTier: 0,
+      autoMinerDamage: 100,
+      autoMinerSpeed: 5000,
+      coins: 0,
     }
 
     let rewards = {
@@ -109,7 +117,7 @@ class GameBoot extends Phaser.Scene {
       currentScene: 'mine',
       currentRock: rocks.rockI,
       currentRockHealth: 0,
-      purchasedRocks: [rocks.rockI, rocks.rockII, rocks.rockIII, rocks.rockIV],
+      purchasedRocks: [rocks.rockI],
       rewardOnScreen: {},
     }
 
@@ -118,6 +126,11 @@ class GameBoot extends Phaser.Scene {
     DataManager.save('gameStats', gameStats)
     DataManager.save('rocks', rocks)
 
-    this.scene.start('mine')
+    var currentScene = DataManager.load('gameStats').currentScene
+    if (currentScene == 'mine') {
+      this.scene.start('mine')
+    } else {
+      this.scene.start(currentScene)
+    }
   }
 }

@@ -1,5 +1,5 @@
 class Shop extends Phaser.Scene {
-    constructor(){
+    constructor() {
         super("shop");
     }
 
@@ -42,12 +42,15 @@ class Shop extends Phaser.Scene {
             return `Pickaxe Power Will Become ${this.playerStats.pickAxePower + 100}`
         } else if (key === "backpackUpgrade") {
             return `Backpack Capacity Will Become ${this.playerStats.backPackCapacity + 5}`
-        } else if (key === "autoMiner") {
-            return `Will Automatically Mine ${this.playerStats.autoMinerTier+1} Rock Per Minute aaaaaaaaaaaaaaaaaaaaa`
+        } else if (key === "autoMinerDamageUpgrade") {
+            return `Autominer Will Deal ${this.playerStats.autoMinerDamage + 100} Damage`
+        } else if (key === "autoMinerSpeedUpgrade") {
+          return `Autominer Will Strike Every ${this.playerStats.autoMinerSpeed > 0 ? (this.playerStats.autoMinerSpeed - 500)/1000 : 0 } Seconds`
         }
       }
 
     create(){
+        this.add.image(0, 50, 'shopBG').setOrigin(0);
         const toolbar = new Toolbar(this);
         this.add.toolbar;
 
@@ -55,14 +58,15 @@ class Shop extends Phaser.Scene {
         var menuContainer = this.add.container(150, 200);
 
         // Define the row height and spacing
-        var rowHeight = 60;
+        var rowHeight = 60; 
         var rowSpacing = 10;
 
         // Define the data for the menu rows
         var menuData = [];
         menuData.push({ label: `Pickaxe Upgrade Tier ${this.convertToRoman(((this.playerStats.pickAxePower)/100)+1)}`, key: "pickaxeUpgrade"}) // + 100 Per Tier
         menuData.push({ label: `Backpack Upgrade Tier ${this.convertToRoman(((this.playerStats.backPackCapacity)/5)+1)}`, key: "backpackUpgrade"}) // + 5 Per Tier
-        menuData.push({ label: `Auto Miner Tier ${this.convertToRoman(this.playerStats.autoMinerTier+1)}`, key: "autoMiner"}) // + 1 Per Tier
+        menuData.push({ label: `Auto Miner Damage Tier ${this.convertToRoman(((this.playerStats.autoMinerDamage)/100)+1)}`, key: "autoMinerDamageUpgrade"}) // + 100 Per Tier
+        menuData.push({ label: `Auto Miner Speed Tier ${this.convertToRoman(((this.playerStats.autoMinerSpeed)/(-500))+12)}`, key: "autoMinerSpeedUpgrade"}) // - .5  Seconds Per Tier
         
         // Loop through the data and create a new row for each item
         for (var i = 0; i < menuData.length; i++) {
@@ -77,7 +81,8 @@ class Shop extends Phaser.Scene {
             // Add the label text to the row
             var rowLabel = this.add.text(10, 10, menuData[i].label, { color: '#ffffff' });
 
-            var rowSublabel = this.add.text(10, 40, this.getSublabel(menuData[i].key), { color: '#ffffff' });
+            var rowSublabel = this.add.text(10, 40, this.getSublabel(menuData[i].key), { color: '#c3c2c3' });
+            rowSublabel.setFontSize(14);
 
             // Add the row elements to the row container
             rowContainer.add(rowBackground);
@@ -94,6 +99,14 @@ class Shop extends Phaser.Scene {
             }, this);
         }
 
+        var sellRowBackground = this.add.rectangle(0, 0, 500, rowHeight, 0x7ae08e);
+        sellRowBackground.setOrigin(0);
+        var sellRowContainer = this.add.container(0, (rowHeight + rowSpacing) * i);
+        sellRowContainer.add(sellRowBackground);
+        var sellRowLabel = this.add.text(10, 10, "Sell all resources", { color: '#ffffff' });
+        sellRowContainer
+
+        menuContainer.add(sellRowContainer);
         this.add.menuContainer;
     }
 
