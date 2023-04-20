@@ -15,6 +15,7 @@ class Toolbar extends Phaser.GameObjects.Container {
         var playerStats = DataManager.load("playerStats");
 
         this.aGrid = new AlignGrid({ scene: this.currentScene, rows: 11, cols: 11 })
+
         //this.aGrid.showNumbers();
 
         var rect = new Phaser.Geom.Rectangle(0, 0, 800, 60);
@@ -25,6 +26,7 @@ class Toolbar extends Phaser.GameObjects.Container {
         coinIcon.scaleX = .1;
         coinIcon.scaleY = .1;
         this.aGrid.placeAtIndex(2, coinIcon);
+
         this.coinText = this.currentScene.add.text(165, 30, playerStats.coins).setOrigin(0, 0.5);
         this.aGrid.placeAtIndex(2.5, this.coinText);
 
@@ -32,10 +34,13 @@ class Toolbar extends Phaser.GameObjects.Container {
         pickaxeIcon.scaleX = .1;
         pickaxeIcon.scaleY = .1;
         this.aGrid.placeAtIndex(9, pickaxeIcon)
+
         this.pickaxeText = this.currentScene.add.text(0,0, playerStats.pickAxePower).setOrigin(0.5, 0.5);
         this.aGrid.placeAtIndex(8, this.pickaxeText);
 
-        var autoMinerEnabler = new AutoMinerEnablerButton(this.currentScene, 545, 30, "autoMiner", .1, .1, "autoMiner");
+        if(gameStats.purchasedAutoMiner){
+            var autoMinerEnabler = new AutoMinerEnablerButton(this.currentScene, 545, 30, "autoMiner", .1, .1, "autoMiner");
+        }
 
         var title = this.currentScene.add.text(360, 20, gameStats.currentScene).setOrigin(0.5,0.5);
         this.aGrid.placeAtIndex(5, title)
