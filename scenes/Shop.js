@@ -6,6 +6,7 @@ class Shop extends Phaser.Scene {
   init() {
     this.playerStats = DataManager.load('playerStats');
     this.gameStats = DataManager.load('gameStats');
+    this.toolbar;
     this.PAPowerInterval = 100;
     this.BackpackInterval = 5;
     this.AMPowerInterval = 50;
@@ -109,10 +110,10 @@ class Shop extends Phaser.Scene {
   }
 
 
-  create() {
+    create(){
     this.add.image(0, 50, 'shopBG').setOrigin(0);
-    const toolbar = new Toolbar(this);
-    this.add.toolbar;
+    this.toolbar = new Toolbar(this)
+    this.toolbar.display()
 
     // Create a new container for the menu
     var menuContainer = this.add.container(150, 140);

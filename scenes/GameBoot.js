@@ -21,6 +21,7 @@ class GameBoot extends Phaser.Scene {
     this.load.image('quartz', 'assets/images/quartz.png')
     this.load.image('iron', 'assets/images/iron.png')
     this.load.image('arrow', 'assets/images/arrow.png')
+    this.load.image('autoMiner', 'assets/images/autoMine.png')
     this.load.image('caveBG', 'assets/images/caveBG.png')
     this.load.image('backpackBG', 'assets/images/backpackBG.png')
     this.load.image('shopBG', 'assets/images/shopBG.png')
@@ -32,6 +33,8 @@ class GameBoot extends Phaser.Scene {
     this.load.audio('backpackOpen', 'assets/sounds/backpackOpen.mp3')
     this.load.audio('mineOpen', 'assets/sounds/mineOpen.mp3')
     this.load.audio('shopOpen', 'assets/sounds/shopOpen.mp3')
+    this.load.audio('buy', 'assets/sounds/buy.mp3')
+    this.load.audio('sell', 'assets/sounds/sell.mp3')
   }
 
   create() {
@@ -41,7 +44,8 @@ class GameBoot extends Phaser.Scene {
       pickAxePower: 100,
       autoMinerDamage: 50,
       autoMinerSpeed: 5000,
-      coins: 0
+      autoMinerEnabled: true,
+      coins: 0,
     }
 
     let rewards = {

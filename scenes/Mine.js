@@ -8,13 +8,13 @@ class Mine extends Phaser.Scene {
     this.rewards = DataManager.load('rewards')
     this.gameStats = DataManager.load('gameStats')
     this.rocks = DataManager.load('rocks')
-    this.backpackText
     this.rock
     this.rockHealthText
     this.rockNameText
     this.isAutoMining = false
     this.arrow1 = null
     this.arrow2 = null
+    this.toolbar
   }
 
   create() {
@@ -23,8 +23,8 @@ class Mine extends Phaser.Scene {
 
     //this.aGrid.showNumbers();
 
-    const toolbar = new Toolbar(this)
-    this.add.toolbar
+    this.toolbar = new Toolbar(this)
+    this.toolbar.display()
 
     this.rockHitSound = this.sound.add('rockHit')
     this.rockHitBreakSound = this.sound.add('rockHitBreak')
@@ -44,8 +44,11 @@ class Mine extends Phaser.Scene {
 
   update() {
     if (!this.isAutoMining) {
-      this.isAutoMining = true;
-      this.autoMine();
+      this.playerStats = DataManager.load("playerStats");
+      if(this.playerStats.autoMinerEnabled) {
+        this.isAutoMining = true;
+        this.autoMine();
+      }
     }
   }
 
@@ -137,6 +140,8 @@ class Mine extends Phaser.Scene {
             )
 
             DataManager.update('playerStats', this.playerStats)
+
+            this.toolbar.display();
 
             // Remove current reward and create a new rock
             this.gameStats.rewardOnScreen = {}
