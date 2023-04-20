@@ -8,31 +8,28 @@ class Mine extends Phaser.Scene {
     this.rewards = DataManager.load('rewards')
     this.gameStats = DataManager.load('gameStats')
     this.rocks = DataManager.load('rocks')
-    this.backpackText
     this.rock
     this.rockHealthText
     this.rockNameText
     this.isAutoMining = false
     this.arrow1 = null
     this.arrow2 = null
+    this.toolbar
   }
 
   create() {
-    this.aGrid = new AlignGrid({scene: this, rows: 11, cols: 11})
+    this.aGrid = new AlignGrid({ scene: this, rows: 11, cols: 11 })
     this.add.image(0, 0, 'caveBG').setOrigin(0)
 
     //this.aGrid.showNumbers();
 
-    const toolbar = new Toolbar(this)
-    this.add.toolbar
+    this.toolbar = new Toolbar(this)
+    this.toolbar.display()
+
     this.rockHitSound = this.sound.add('rockHit')
     this.rockHitBreakSound = this.sound.add('rockHitBreak')
     this.rewardSound = this.sound.add('reward')
     this.errorSound = this.sound.add('error')
-    this.backpackText = this.add
-      .text(0, 0, `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`)
-      .setOrigin(0, 0.5)
-    this.aGrid.placeAtIndex(0.5, this.backpackText)
 
     // Create Rock
     if (this.isObjEmpty(this.gameStats.rewardOnScreen)) {
@@ -44,67 +41,64 @@ class Mine extends Phaser.Scene {
 
   update() {
     if (!this.isAutoMining) {
-      this.isAutoMining = true
-      this.autoMine()
+      this.playerStats = DataManager.load("playerStats");
+      if(this.playerStats.autoMinerEnabled) {
+        this.isAutoMining = true;
+        this.autoMine();
+      }
     }
   }
 
   autoMine() {
     this.time.addEvent({
-      delay: this.playerStats.autoMinerSpeed,
-      callback: () => {
-        if (
-          this.playerStats.autoMinerDamage > 0 &&
-          this.isObjEmpty(this.gameStats.rewardOnScreen)
-        ) {
-          this.damageRock(this.playerStats.autoMinerDamage)
+      delay: this.playerStats.autoMinerSpeed, callback: () => {
+        if (this.playerStats.autoMinerDamage > 0 && this.isObjEmpty(this.gameStats.rewardOnScreen)) {
+          this.damageRock(this.playerStats.autoMinerDamage);
         }
         this.isAutoMining = false
-      },
+      }
     })
   }
 
   createRock(rockObj) {
-    this.rock = this.add.sprite(0, 0, 'rock').setInteractive()
-    this.rock.scale = 0.5
-    Align.center(this.rock)
+    this.rock = this.add.sprite(0, 0, rockObj.imageKey).setInteractive();
+    this.rock.scale = 0.5;
+    Align.center(this.rock);
 
-    let maxRockHealth = rockObj.maxHealth
-    let currentRockHealth
+    let maxRockHealth = rockObj.maxHealth;
+    let currentRockHealth;
     if (this.gameStats.currentRockHealth > 0) {
-      currentRockHealth = this.gameStats.currentRockHealth
+      currentRockHealth = this.gameStats.currentRockHealth;
     } else {
-      currentRockHealth = rockObj.maxHealth
-      this.gameStats.currentRockHealth = rockObj.maxHealth
+      currentRockHealth = rockObj.maxHealth;
+      this.gameStats.currentRockHealth = rockObj.maxHealth;
     }
 
-    DataManager.update('gameStats', this.gameStats)
+    DataManager.update('gameStats', this.gameStats);
 
-    this.rockHealthText = this.add.text(0, 0, `${currentRockHealth}/${maxRockHealth}`)
-    this.rockHealthText.setOrigin(0.5, 0.5)
-    this.aGrid.placeAtIndex(93, this.rockHealthText)
+    this.rockHealthText = this.add.text(0, 0, `${currentRockHealth}/${maxRockHealth}`);
+    this.rockHealthText.setOrigin(0.5, 0.5);
+    this.aGrid.placeAtIndex(93, this.rockHealthText);
 
-    this.createRockUI(rockObj)
+    this.createRockUI(rockObj);
 
-    this.rock.on('pointerup', () => {
-      this.damageRock(this.playerStats.pickAxePower)
+    this.rock.on("pointerup", () => {
+      this.damageRock(this.playerStats.pickAxePower);
     })
   }
 
   damageRock(damage) {
-    this.gameStats.currentRockHealth -= damage
-    DataManager.update('gameStats', this.gameStats)
+    this.gameStats.currentRockHealth -= damage;
+    DataManager.update('gameStats', this.gameStats);
 
     if (this.gameStats.currentRockHealth > 0) {
-      this.rockHealthText.setText(
-        `${this.gameStats.currentRockHealth}/${this.gameStats.currentRock.maxHealth}`
-      )
-      this.rockHitSound.play()
+      this.rockHealthText.setText(`${this.gameStats.currentRockHealth}/${this.gameStats.currentRock.maxHealth}`);
+      this.rockHitSound.play();
     } else {
-      this.rockHealthText.setText(`0/${this.gameStats.currentRock.maxHealth}`)
-      this.rockHitBreakSound.play()
-      this.removeRockUI()
-      this.showReward(this.getReward(this.gameStats.currentRock.possibleRewards))
+      this.rockHealthText.setText(`0/${this.gameStats.currentRock.maxHealth}`);
+      this.rockHitBreakSound.play();
+      this.removeRockUI();
+      this.showReward(this.getReward(this.gameStats.currentRock.possibleRewards));
     }
   }
 
@@ -130,7 +124,7 @@ class Mine extends Phaser.Scene {
       clickable = false
 
       // Check if the player has room to collect item
-      if (this.playerStats.currentItemCount < this.playerStats.backPackCapacity) {
+      if (this.playerStats.currentBackpackItems.length < this.playerStats.backPackCapacity) {
         this.rewardSound.play()
         this.time.addEvent({
           delay: /*1000*/ 0,
@@ -138,13 +132,9 @@ class Mine extends Phaser.Scene {
             // Add reward to backpack
             this.playerStats.currentBackpackItems.push(reward)
 
-            // Update backpack current items
-            this.playerStats.currentItemCount++
-            this.backpackText.setText(
-              `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`
-            )
-
             DataManager.update('playerStats', this.playerStats)
+
+            this.toolbar.display();
 
             // Remove current reward and create a new rock
             this.gameStats.rewardOnScreen = {}
