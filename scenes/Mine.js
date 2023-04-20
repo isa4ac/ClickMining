@@ -44,8 +44,11 @@ class Mine extends Phaser.Scene {
 
   update() {
     if (!this.isAutoMining) {
-      this.isAutoMining = true;
-      this.autoMine();
+      this.playerStats = DataManager.load("playerStats");
+      if(this.playerStats.autoMinerEnabled) {
+        this.isAutoMining = true;
+        this.autoMine();
+      }
     }
   }
 
