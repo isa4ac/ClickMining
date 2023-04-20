@@ -39,7 +39,7 @@ class GameBoot extends Phaser.Scene {
       backPackCapacity: 5,
       currentBackpackItems: [],
       pickAxePower: 100,
-      autoMinerDamage: 100,
+      autoMinerDamage: 50,
       autoMinerSpeed: 5000,
       coins: 0
     }
