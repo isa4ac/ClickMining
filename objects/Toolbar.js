@@ -38,7 +38,9 @@ class Toolbar extends Phaser.GameObjects.Container {
         this.pickaxeText = this.currentScene.add.text(0,0, playerStats.pickAxePower).setOrigin(0.5, 0.5);
         this.aGrid.placeAtIndex(8, this.pickaxeText);
 
-        var autoMinerEnabler = new AutoMinerEnablerButton(this.currentScene, 545, 30, "autoMiner", .1, .1, "autoMiner");
+        if(gameStats.purchasedAutoMiner){
+            var autoMinerEnabler = new AutoMinerEnablerButton(this.currentScene, 545, 30, "autoMiner", .1, .1, "autoMiner");
+        }
 
         var title = this.currentScene.add.text(360, 20, gameStats.currentScene).setOrigin(0.5,0.5);
         this.aGrid.placeAtIndex(5, title)

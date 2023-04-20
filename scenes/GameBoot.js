@@ -127,6 +127,7 @@ class GameBoot extends Phaser.Scene {
       currentRock: rocks.rockI,
       currentRockHealth: 0,
       purchasedRocks: [rocks.rockI],
+      purchasedAutoMiner: false,
       rewardOnScreen: {},
     }
 
