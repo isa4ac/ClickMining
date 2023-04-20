@@ -62,7 +62,7 @@ class Mine extends Phaser.Scene {
   }
 
   createRock(rockObj) {
-    this.rock = this.add.sprite(0, 0, "rock").setInteractive();
+    this.rock = this.add.sprite(0, 0, rockObj.imageKey).setInteractive();
     this.rock.scale = 0.5;
     Align.center(this.rock);
 

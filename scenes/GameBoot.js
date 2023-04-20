@@ -7,7 +7,11 @@ class GameBoot extends Phaser.Scene {
     this.load.image('backpack', 'assets/images/backpack.png')
     this.load.image('shop', 'assets/images/shop.png')
     this.load.image('cave', 'assets/images/cave.png')
-    this.load.image('rock', 'assets/images/rock.png')
+    this.load.image('rockI', 'assets/images/rockI.png')
+    this.load.image('rockII', 'assets/images/rockII.png')
+    this.load.image('rockIII', 'assets/images/rockIII.png')
+    this.load.image('rockIV', 'assets/images/rockIV.png')
+    this.load.image('rockV', 'assets/images/rockV.png')
     this.load.image('sellButton', 'assets/images/sell.png')
     this.load.image('coins', 'assets/images/coins.png')
     this.load.image('amethyst', 'assets/images/amethyst.png')
@@ -39,13 +43,13 @@ class GameBoot extends Phaser.Scene {
 
   create() {
     let playerStats = {
-      backPackCapacity: 5,
+      backPackCapacity: 500,
       currentBackpackItems: [],
-      pickAxePower: 100,
-      autoMinerDamage: 100,
-      autoMinerSpeed: 5000,
+      pickAxePower: 10000,
+      autoMinerDamage: 10000,
+      autoMinerSpeed: 1000,
       autoMinerEnabled: true,
-      coins: 0,
+      coins: 10000,
     }
 
     let rewards = {
@@ -93,24 +97,28 @@ class GameBoot extends Phaser.Scene {
         number: 0,
         maxHealth: 1000,
         possibleRewards: [rewards.coal, rewards.iron, rewards.quartz],
+        imageKey: 'rockI'
       },
       rockII: {
         name: 'Rock II',
         number: 1,
         maxHealth: 5000,
         possibleRewards: [rewards.amethyst, rewards.topaz, rewards.sapphire],
+        imageKey: 'rockII'
       },
       rockIII: {
         name: 'Rock III',
         number: 2,
         maxHealth: 10000,
         possibleRewards: [rewards.ruby, rewards.emerald],
+        imageKey: 'rockIII'
       },
       rockIV: {
         name: 'Rock IV',
         number: 3,
         maxHealth: 50000,
         possibleRewards: [rewards.diamond],
+        imageKey: 'rockIV'
       },
     }
 
