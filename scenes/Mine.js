@@ -12,6 +12,7 @@ class Mine extends Phaser.Scene {
     this.rock
     this.rockHealthText
     this.rockNameText
+    this.isAutoMining = false
     this.arrow1 = null
     this.arrow2 = null
   }
@@ -29,15 +30,8 @@ class Mine extends Phaser.Scene {
     this.rockHitBreakSound = this.sound.add('rockHitBreak')
     this.rewardSound = this.sound.add('reward')
     this.errorSound = this.sound.add('error')
-    this.backpackText = this.add.text(
-      55,
-      75,
-      `${this.playerStats.currentBackpackItems.length}/${this.playerStats.backPackCapacity}`
-    )
-
-    // Create Shop Button
-
-    // Create Next Rock Button
+    this.backpackText = this.add.text(0, 0, `${this.playerStats.currentBackpackItems.length}/${this.playerStats.backPackCapacity}`).setOrigin(0, 0.5);
+    this.aGrid.placeAtIndex(0.5, this.backpackText);
 
     // Create Rock
     if (this.isObjEmpty(this.gameStats.rewardOnScreen)) {
@@ -46,9 +40,6 @@ class Mine extends Phaser.Scene {
       this.showReward(this.gameStats.rewardOnScreen)
     }
 
-    // PickAxe
-
-    // Coins
   }
 
   update() {
@@ -145,7 +136,6 @@ class Mine extends Phaser.Scene {
               `${this.playerStats.currentBackpackItems.length}/${this.playerStats.backPackCapacity}`
             )
 
-            // Update registry
             DataManager.update('playerStats', this.playerStats)
 
             // Remove current reward and create a new rock

@@ -63,9 +63,10 @@ class Shop extends Phaser.Scene {
     }
   }
 
-  create() {
-    const toolbar = new Toolbar(this);
-    this.add.toolbar;
+    create(){
+        this.add.image(0, 50, 'shopBG').setOrigin(0);
+        const toolbar = new Toolbar(this);
+        this.add.toolbar;
 
     // Create a new container for the menu
     var menuContainer = this.add.container(150, 150);
