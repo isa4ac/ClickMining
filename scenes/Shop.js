@@ -46,7 +46,7 @@ class Shop extends Phaser.Scene {
 
     return roman;
   }
-
+  
   getSublabel(key) {
     if (key === "pickaxeUpgrade") {
       return `Pickaxe Power Will Become ${this.playerStats.pickAxePower + 100}`
@@ -124,9 +124,39 @@ class Shop extends Phaser.Scene {
     var sellRowLabel = this.add.text(10, 10, "Sell all resources", { color: '#ffffff' });
     sellRowContainer.add(sellRowLabel);
 
+    this.sellSound = this.sound.add('rockHit')
+
     menuContainer.add(sellRowContainer);
     this.add.menuContainer;
   }
 
   update() { }
+}
+
+// 2. Create the button class
+class Button extends Phaser.GameObjects.Container {
+  constructor(scene, x, y, text) {
+    super(scene, x, y);
+
+    this.button = scene.add.image(0, 0, 'button');
+    this.buttonPressed = scene.add.image(0, 0, 'button_pressed').setVisible(false);
+    this.text = scene.add.text(0, 0, text, { fontSize: '24px', color: '#000' }).setOrigin(0.5);
+
+    this.add([this.button, this.buttonPressed, this.text]);
+
+    this.button.setInteractive({ useHandCursor: true });
+
+    // 3. Define the interactivity
+    this.button.on('pointerdown', () => {
+      this.button.setVisible(false);
+      this.buttonPressed.setVisible(true);
+    });
+
+    this.button.on('pointerup', () => {
+      this.button.setVisible(true);
+      this.buttonPressed.setVisible(false);
+    });
+
+    scene.add.existing(this);
+  }
 }
