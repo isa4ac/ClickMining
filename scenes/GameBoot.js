@@ -33,11 +33,11 @@ class GameBoot extends Phaser.Scene {
   create() {
     let playerStats = {
       backPackCapacity: 5,
-      currentItemCount: 0,
       currentBackpackItems: [],
       pickAxePower: 100,
       autoMinerDamage: 100,
-      autoMinerSpeed: 5000
+      autoMinerSpeed: 5000,
+      coins: 0
     }
 
     let rewards = {
@@ -47,19 +47,19 @@ class GameBoot extends Phaser.Scene {
       },
       diamond: {
         name: 'diamond',
-        value: 10,
+        value: 50,
       },
       emerald: {
         name: 'emerald',
-        value: 10,
+        value: 30,
       },
       ruby: {
         name: 'ruby',
-        value: 10,
+        value: 30,
       },
       sapphire: {
         name: 'sapphire',
-        value: 10,
+        value: 25,
       },
       topaz: {
         name: 'topaz',
@@ -67,7 +67,7 @@ class GameBoot extends Phaser.Scene {
       },
       coal: {
         name: 'coal',
-        value: 10,
+        value: 5,
       },
       quartz: {
         name: 'quartz',
@@ -75,7 +75,7 @@ class GameBoot extends Phaser.Scene {
       },
       iron: {
         name: 'iron',
-        value: 10,
+        value: 5,
       },
     }
 

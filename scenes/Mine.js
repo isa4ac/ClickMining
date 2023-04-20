@@ -17,7 +17,7 @@ class Mine extends Phaser.Scene {
   }
 
   create() {
-    this.aGrid = new AlignGrid({scene: this, rows: 11, cols: 11})
+    this.aGrid = new AlignGrid({ scene: this, rows: 11, cols: 11 })
     this.add.image(0, 0, 'caveBG').setOrigin(0)
 
     //this.aGrid.showNumbers();
@@ -32,7 +32,7 @@ class Mine extends Phaser.Scene {
     this.backpackText = this.add.text(
       55,
       75,
-      `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`
+      `${this.playerStats.currentBackpackItems.length}/${this.playerStats.backPackCapacity}`
     )
 
     // Create Shop Button
@@ -51,89 +51,64 @@ class Mine extends Phaser.Scene {
     // Coins
   }
 
- update(){
-        if (!this.isAutoMining){
-            this.isAutoMining = true;
-            this.autoMine();
-        }
-        
+  update() {
+    if (!this.isAutoMining) {
+      this.isAutoMining = true;
+      this.autoMine();
     }
+  }
 
-    autoMine(){
-        this.time.addEvent({delay: this.playerStats.autoMinerSpeed, callback: () =>{
-            if (this.playerStats.autoMinerDamage > 0 && this.isObjEmpty(this.gameStats.rewardOnScreen)){
-                this.damageRock(this.playerStats.autoMinerDamage);
-            }
-            this.isAutoMining = false
-        }})
-    }
-
-    createRock(rockObj){
-        this.rock = this.add.sprite(0, 0, "rock").setInteractive();
-        this.rock.scale = 0.5;
-        Align.center(this.rock);
-
-        let maxRockHealth = rockObj.maxHealth;
-        let currentRockHealth;
-        if (this.gameStats.currentRockHealth > 0){
-            currentRockHealth = this.gameStats.currentRockHealth;
-        } else {
-            currentRockHealth = rockObj.maxHealth;
-            this.gameStats.currentRockHealth = rockObj.maxHealth;
+  autoMine() {
+    this.time.addEvent({
+      delay: this.playerStats.autoMinerSpeed, callback: () => {
+        if (this.playerStats.autoMinerDamage > 0 && this.isObjEmpty(this.gameStats.rewardOnScreen)) {
+          this.damageRock(this.playerStats.autoMinerDamage);
         }
-
-        DataManager.update('gameStats', this.gameStats);
-
-        this.rockHealthText = this.add.text(0, 0, `${currentRockHealth}/${maxRockHealth}`);
-        this.rockHealthText.setOrigin(0.5, 0.5);
-        this.aGrid.placeAtIndex(93, this.rockHealthText);
-
-        this.createRockUI(rockObj);
-
-        this.rock.on("pointerup", () => {
-            this.damageRock(this.playerStats.pickAxePower);
-        })
-    }
-
-damageRock(damage){
-
-        this.gameStats.currentRockHealth -= damage;
-        DataManager.update('gameStats', this.gameStats);
-
-        if (this.gameStats.currentRockHealth > 0){
-            this.rockHealthText.setText(`${this.gameStats.currentRockHealth}/${this.gameStats.currentRock.maxHealth}`);
-            this.rockHitSound.play();
-        } else {
-            this.rockHealthText.setText(`0/${this.gameStats.currentRock.maxHealth}`);
-            this.rockHitBreakSound.play();
-            this.removeRockUI();
-            this.showReward(this.getReward(this.gameStats.currentRock.possibleRewards));
-        }
-
-    this.rockHealthText = this.add.text(0, 0, `${currentRockHealth}/${maxRockHealth}`)
-    this.rockHealthText.setOrigin(0.5, 0.5)
-    this.aGrid.placeAtIndex(93, this.rockHealthText)
-
-    this.createRockUI(rockObj)
-
-    let possibleRewards = rockObj.possibleRewards
-
-    this.rock.on('pointerup', () => {
-      currentRockHealth -= this.playerStats.pickAxePower
-
-      this.gameStats.currentRockHealth = currentRockHealth
-      DataManager.update('gameStats', this.gameStats)
-
-      if (currentRockHealth > 0) {
-        this.rockHealthText.setText(`${currentRockHealth}/${maxRockHealth}`)
-        this.rockHitSound.play()
-      } else {
-        this.rockHealthText.setText(`0/${maxRockHealth}`)
-        this.rockHitBreakSound.play()
-        this.removeRockUI()
-        this.showReward(this.getReward(possibleRewards))
+        this.isAutoMining = false
       }
     })
+  }
+
+  createRock(rockObj) {
+    this.rock = this.add.sprite(0, 0, "rock").setInteractive();
+    this.rock.scale = 0.5;
+    Align.center(this.rock);
+
+    let maxRockHealth = rockObj.maxHealth;
+    let currentRockHealth;
+    if (this.gameStats.currentRockHealth > 0) {
+      currentRockHealth = this.gameStats.currentRockHealth;
+    } else {
+      currentRockHealth = rockObj.maxHealth;
+      this.gameStats.currentRockHealth = rockObj.maxHealth;
+    }
+
+    DataManager.update('gameStats', this.gameStats);
+
+    this.rockHealthText = this.add.text(0, 0, `${currentRockHealth}/${maxRockHealth}`);
+    this.rockHealthText.setOrigin(0.5, 0.5);
+    this.aGrid.placeAtIndex(93, this.rockHealthText);
+
+    this.createRockUI(rockObj);
+
+    this.rock.on("pointerup", () => {
+      this.damageRock(this.playerStats.pickAxePower);
+    })
+  }
+
+  damageRock(damage) {
+    this.gameStats.currentRockHealth -= damage;
+    DataManager.update('gameStats', this.gameStats);
+
+    if (this.gameStats.currentRockHealth > 0) {
+      this.rockHealthText.setText(`${this.gameStats.currentRockHealth}/${this.gameStats.currentRock.maxHealth}`);
+      this.rockHitSound.play();
+    } else {
+      this.rockHealthText.setText(`0/${this.gameStats.currentRock.maxHealth}`);
+      this.rockHitBreakSound.play();
+      this.removeRockUI();
+      this.showReward(this.getReward(this.gameStats.currentRock.possibleRewards));
+    }
   }
 
   getReward(rewards) {
@@ -158,18 +133,16 @@ damageRock(damage){
       clickable = false
 
       // Check if the player has room to collect item
-      if (this.playerStats.currentItemCount < this.playerStats.backPackCapacity) {
+      if (this.playerStats.currentBackpackItems.length < this.playerStats.backPackCapacity) {
         this.rewardSound.play()
         this.time.addEvent({
           delay: /*1000*/ 0,
           callback: () => {
             // Add reward to backpack
-            this.playerStats.currentBackpackItems.push(reward)
+            this.playeßrStats.currentBackpackItems.push(reward)
 
-            // Update backpack current items
-            this.playerStats.currentItemCount++
             this.backpackText.setText(
-              `${this.playerStats.currentItemCount}/${this.playerStats.backPackCapacity}`
+              `${this.playerStats.currentBackpackItems.length}/${this.playerStats.backPackCapacity}`
             )
 
             // Update registry
