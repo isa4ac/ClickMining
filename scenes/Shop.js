@@ -89,25 +89,30 @@ class Shop extends Phaser.Scene {
   }
 
   incrementUpgrade(key) {
+    this.buySound = this.sound.add('buy');
     if (key === "pickaxeUpgrade") {
       if (this.playerStats.coins >= this.getPrice(key)) {
         this.playerStats.coins = this.playerStats.coins - this.getPrice(key);
         this.playerStats.pickAxePower = this.playerStats.pickAxePower + this.PAPowerInterval;
+        this.buySound.play();
       }
     } else if (key === "backpackUpgrade") {
       if (this.playerStats.coins >= this.getPrice(key)) {
         this.playerStats.coins = this.playerStats.coins - this.getPrice(key);
         this.playerStats.backPackCapacity = this.playerStats.backPackCapacity + this.BackpackInterval;
+        this.buySound.play();
       }
     } else if (key === "autoMinerDamageUpgrade") {
       if (this.playerStats.coins >= this.getPrice(key)) {
         this.playerStats.coins = this.playerStats.coins - this.getPrice(key);
         this.playerStats.autoMinerDamage = this.playerStats.autoMinerDamage + this.AMPowerInterval;
+        this.buySound.play();
       }
     } else if (key === "autoMinerSpeedUpgrade") {
       if (this.playerStats.coins >= this.getPrice(key)) {
         this.playerStats.coins = this.playerStats.coins - this.getPrice(key);
         this.playerStats.autoMinerSpeed = this.playerStats.autoMinerSpeed - this.AMTimeInterval;
+        this.buySound.play();
       }
     }
   }
