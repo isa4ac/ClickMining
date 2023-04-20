@@ -139,7 +139,7 @@ class Mine extends Phaser.Scene {
           delay: /*1000*/ 0,
           callback: () => {
             // Add reward to backpack
-            this.playeßrStats.currentBackpackItems.push(reward)
+            this.playerStats.currentBackpackItems.push(reward);
 
             this.backpackText.setText(
               `${this.playerStats.currentBackpackItems.length}/${this.playerStats.backPackCapacity}`
