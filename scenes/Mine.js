@@ -138,10 +138,6 @@ class Mine extends Phaser.Scene {
             // Add reward to backpack
             this.playerStats.currentBackpackItems.push(reward)
 
-            this.backpackText.setText(
-              `${this.playerStats.currentBackpackItems.length}/${this.playerStats.backPackCapacity}`
-            )
-
             DataManager.update('playerStats', this.playerStats)
 
             this.toolbar.display()
