@@ -18,6 +18,19 @@ class Shop extends Phaser.Scene {
     this.menuData = [];
   }
 
+  buyAutoMiner() {
+    if (this.playerStats.coins >= 350) {
+      this.playerStats.coins = this.playerStats.coins - 350;
+      this.gameStats.purchasedAutoMiner = true;
+      this.buySound = this.sound.add('buy');
+      this.buySound.play();
+      DataManager.update('playerStats', this.playerStats);
+      DataManager.update('gameStats', this.gameStats);
+      this.displayMenu();
+      this.toolbar.display();
+    }
+  }
+
   sellItems() {
     var backpackItems = this.playerStats.currentBackpackItems;
     if (backpackItems.length > 0) {
@@ -137,8 +150,10 @@ class Shop extends Phaser.Scene {
     this.menuData.splice(0, this.menuData.length);
     this.menuData.push({ label: `Pickaxe Upgrade Tier ${this.convertToRoman(((this.playerStats.pickAxePower) / this.PAPowerInterval) + 1)}`, key: "pickaxeUpgrade" }) // + 100 Per Tier
     this.menuData.push({ label: `Backpack Upgrade Tier ${this.convertToRoman(((this.playerStats.backPackCapacity) / this.BackpackInterval) + 1)}`, key: "backpackUpgrade" }) // + 5 Per Tier
-    this.menuData.push({ label: `Auto Miner Damage Tier ${this.convertToRoman(((this.playerStats.autoMinerDamage) / this.AMPowerInterval) + 1)}`, key: "autoMinerDamageUpgrade" }) // + 50 Per Tier
-    this.menuData.push({ label: `Auto Miner Speed Tier ${this.convertToRoman(((5000-(this.playerStats.autoMinerSpeed - this.AMTimeInterval)) / 1000) + 1)}`, key: "autoMinerSpeedUpgrade" }) // - .1  Seconds Per Tier
+    if (this.gameStats.purchasedAutoMiner) {
+      this.menuData.push({ label: `Auto Miner Damage Tier ${this.convertToRoman(((this.playerStats.autoMinerDamage) / this.AMPowerInterval) + 1)}`, key: "autoMinerDamageUpgrade" }) // + 50 Per Tier
+      this.menuData.push({ label: `Auto Miner Speed Tier ${this.convertToRoman(((5000-(this.playerStats.autoMinerSpeed - this.AMTimeInterval)) / 1000) + 1)}`, key: "autoMinerSpeedUpgrade" }) // - .1  Seconds Per Tier
+    }
     // Create a new container for the menu
     var menuContainer = this.add.container(150, 140);
     // Loop through the data and create a new row for each item
@@ -175,6 +190,27 @@ class Shop extends Phaser.Scene {
 
       // Add the row container to the menu container
       menuContainer.add(rowContainer);
+    }
+
+    if (this.gameStats.purchasedAutoMiner === false) {
+      let AMRowBackground = this.add.rectangle(0, 0, 500, this.rowHeight, 0x7e705d);
+      AMRowBackground.setOrigin(0);
+
+      var AMRowSublabel = this.add.text(10, 35, 'Unlocks Auto Miner', { color: '#c3c2c3' });
+      AMRowSublabel.setFontSize(14);
+      var AMRowContainer = this.add.container(0, (this.rowHeight + this.rowSpacing) * 2);
+      AMRowContainer.add(AMRowBackground);
+      var AMRowLabel = this.add.text(10, 10, "Buy Auto Miner", { color: '#ffffff' });
+      AMRowContainer.add(AMRowLabel);
+      AMRowContainer.add(AMRowSublabel);
+
+      // Create the button and add it to the container
+      let buyAutoMinerButton = new Button(this, 425, this.rowHeight / 2, '$350', () => {
+        this.buyAutoMiner();
+      });
+
+      AMRowContainer.add(buyAutoMinerButton);
+      menuContainer.add(AMRowContainer);
     }
 
     let sellRowBackground = this.add.rectangle(0, 0, 500, this.rowHeight, 0x4c4438);
