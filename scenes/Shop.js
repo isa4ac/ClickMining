@@ -152,7 +152,7 @@ class Shop extends Phaser.Scene {
     this.menuData.push({ label: `Backpack Upgrade Tier ${this.convertToRoman(((this.playerStats.backPackCapacity) / this.BackpackInterval) + 1)}`, key: "backpackUpgrade" }) // + 5 Per Tier
     if (this.gameStats.purchasedAutoMiner) {
       this.menuData.push({ label: `Auto Miner Damage Tier ${this.convertToRoman(((this.playerStats.autoMinerDamage) / this.AMPowerInterval) + 1)}`, key: "autoMinerDamageUpgrade" }) // + 50 Per Tier
-      this.menuData.push({ label: `Auto Miner Speed Tier ${this.convertToRoman(((5000-(this.playerStats.autoMinerSpeed - this.AMTimeInterval)) / 1000) + 1)}`, key: "autoMinerSpeedUpgrade" }) // - .1  Seconds Per Tier
+      this.menuData.push({ label: `Auto Miner Speed Tier ${this.convertToRoman(((5000-(this.playerStats.autoMinerSpeed - this.AMTimeInterval)) / 100) + 1)}`, key: "autoMinerSpeedUpgrade" }) // - .1  Seconds Per Tier
     }
     // Create a new container for the menu
     var menuContainer = this.add.container(150, 140);
