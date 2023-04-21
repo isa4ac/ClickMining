@@ -30,7 +30,11 @@ class GameBoot extends Phaser.Scene {
     this.load.image('backpackBG', 'assets/images/backpackBG.png')
     this.load.image('shopBG', 'assets/images/shopBG.png')
 
-    this.load.audio('rockHit', 'assets/sounds/rockHit.mp3')
+    this.load.audio('rockHit1', 'assets/sounds/rockHit1.mp3')
+    this.load.audio('rockHit2', 'assets/sounds/rockHit2.mp3')
+    this.load.audio('rockHit3', 'assets/sounds/rockHit3.mp3')
+    this.load.audio('rockHit4', 'assets/sounds/rockHit4.mp3')
+    this.load.audio('rockHit5', 'assets/sounds/rockHit5.mp3')
     this.load.audio('rockHitBreak', 'assets/sounds/rockHitBreak.mp3')
     this.load.audio('reward', 'assets/sounds/reward.mp3')
     this.load.audio('error', 'assets/sounds/error.mp3')
