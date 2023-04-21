@@ -26,7 +26,6 @@ class Mine extends Phaser.Scene {
     this.toolbar = new Toolbar(this)
     this.toolbar.display()
 
-    this.rockHitSound = this.sound.add('rockHit')
     this.rockHitBreakSound = this.sound.add('rockHitBreak')
     this.rewardSound = this.sound.add('reward')
     this.errorSound = this.sound.add('error')
@@ -92,6 +91,7 @@ class Mine extends Phaser.Scene {
   damageRock(damage) {
     this.gameStats.currentRockHealth -= damage;
     DataManager.update('gameStats', this.gameStats);
+    this.rockHitSound = this.sound.add(RandomSound.getSound());
 
     if (this.gameStats.currentRockHealth > 0) {
       this.rockHealthText.setText(`${this.gameStats.currentRockHealth}/${this.gameStats.currentRock.maxHealth}`);
