@@ -108,21 +108,24 @@ class GameBoot extends Phaser.Scene {
         number: 1,
         maxHealth: 5000,
         possibleRewards: [rewards.amethyst, rewards.topaz, rewards.sapphire],
-        imageKey: 'rockII'
+        imageKey: 'rockII',
+        price: 400,
       },
       rockIII: {
         name: 'Rock III',
         number: 2,
         maxHealth: 10000,
         possibleRewards: [rewards.ruby, rewards.emerald],
-        imageKey: 'rockIII'
+        imageKey: 'rockIII',
+        price: 900,
       },
       rockIV: {
         name: 'Rock IV',
         number: 3,
         maxHealth: 50000,
         possibleRewards: [rewards.diamond],
-        imageKey: 'rockIV'
+        imageKey: 'rockIV',
+        price: 3000,
       },
     }
 
