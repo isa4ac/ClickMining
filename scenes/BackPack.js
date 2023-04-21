@@ -7,7 +7,6 @@ class BackPack extends Phaser.Scene {
     this.playerStats = DataManager.load('playerStats')
     this.rewards = DataManager.load('rewards')
     this.gameStats = DataManager.load('gameStats')
-    this.toolbar
   }
 
   create() {
@@ -16,8 +15,8 @@ class BackPack extends Phaser.Scene {
 
     //this.aGrid.showNumbers();
 
-    this.toolbar = new Toolbar(this)
-    this.toolbar.display()
+    const toolbar = new Toolbar(this)
+    this.add.toolbar
 
     let backpackItems = this.playerStats.currentBackpackItems
     let itemNames = []
