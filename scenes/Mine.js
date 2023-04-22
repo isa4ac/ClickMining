@@ -40,7 +40,7 @@ class Mine extends Phaser.Scene {
 
   update() {
     if (this.gameStats.purchasedAutoMiner && !this.isAutoMining) {
-      this.playerStats = DataManager.load('playerStats')
+      this.playerStats = DataManager.load('playerStats');
       if (this.playerStats.autoMinerEnabled) {
         this.isAutoMining = true
         this.autoMine()
@@ -235,6 +235,7 @@ class Mine extends Phaser.Scene {
             this.gameStats.currentRock = this.gameStats.purchasedRocks[currentRockIndex + 1]
             this.gameStats.currentRockHealth = this.gameStats.currentRock.maxHealth
             DataManager.update('gameStats', this.gameStats)
+            DataManager.update('playerStats', this.playerStats)
             // Destroy old UI sprites and text
             this.removeRockUI()
             // Create new rock
