@@ -1,5 +1,8 @@
 # ClickMining
 
+## Play Now:
+https://ajwhite00.github.io/ClickMining/
+
 ## Development
 
 ### Phaser 3
